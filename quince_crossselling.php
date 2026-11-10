@@ -53,7 +53,7 @@ class Quince_Crossselling extends Module
     {
         $this->name = 'quince_crossselling';
         $this->tab = 'front_office_features';
-        $this->version = '0.2.1';
+        $this->version = '0.2.2';
         $this->author = 'Quince Project';
         $this->need_instance = 0;
         $this->ps_versions_compliancy = ['min' => '9.0.0', 'max' => '9.99.99'];
@@ -142,15 +142,15 @@ class Quince_Crossselling extends Module
     {
         $miejsca = [
             self::HOOK_PRODUCT => [
-                'Quince — produkty do dokupienia na karcie produktu',
+                'Quince:produkty do dokupienia na karcie produktu',
                 'Karuzela pod kartą produktu. Motyw podaje parametry qIle i qStrzalki z panelu strony produktu.',
             ],
             self::HOOK_DRAWER => [
-                'Quince — dokupka w szufladzie koszyka',
+                'Quince:dokupka w szufladzie koszyka',
                 'Lista „Może Ci się przydać" pod pozycjami w szufladzie koszyka.',
             ],
             self::HOOK_CART_SUGGEST => [
-                'Quince — dokupka na stronie koszyka',
+                'Quince:dokupka na stronie koszyka',
                 'Krótka lista „Nie zapomnij" pod pozycjami na stronie koszyka.',
             ],
         ];

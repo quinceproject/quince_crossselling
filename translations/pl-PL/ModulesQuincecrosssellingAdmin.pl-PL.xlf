@@ -171,6 +171,11 @@
         <target>Bestsellery sklepu</target>
       </trans-unit>
 
+      <trans-unit id="quince.crossselling.zly_token">
+        <source>Invalid security token, please try again.</source>
+        <target>Nieprawidłowy token bezpieczeństwa, spróbuj ponownie.</target>
+      </trans-unit>
+
     </body>
   </file>
 </xliff>

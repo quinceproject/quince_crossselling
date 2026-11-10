@@ -25,7 +25,7 @@ function upgrade_module_0_2_1($module): bool
     if (!Hook::getIdByName(Quince_Crossselling::HOOK_CART_SUGGEST)) {
         $hook = new Hook();
         $hook->name = Quince_Crossselling::HOOK_CART_SUGGEST;
-        $hook->title = 'Quince — dokupka na stronie koszyka';
+        $hook->title = 'Quince: dokupka na stronie koszyka';
         $hook->description = 'Krótka lista „Nie zapomnij" pod pozycjami na stronie koszyka.';
         $hook->position = false;
 
