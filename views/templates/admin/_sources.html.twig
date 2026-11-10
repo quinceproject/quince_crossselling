@@ -1,0 +1,30 @@
+{# Źródła podpowiedzi dla jednego miejsca.
+   Znacznik wysyłki odróżnia „nic nie zaznaczono" od „tego pola nie było",
+   inaczej nie dałoby się odznaczyć ostatniego źródła.
+
+   Zmienne: placement (CART, DRAWER …), selected (zaznaczone źródła),
+   sourceList (wszystkie źródła w stałej kolejności). #}
+{% trans_default_domain 'Modules.Quincecrossselling.Admin' %}
+
+{% set nazwy = {
+    'bought': 'Bought together in past orders'|trans,
+    'accessories': 'Accessories assigned to the product'|trans,
+    'category': 'Products from the same category'|trans,
+    'bestsellers': 'Best sellers of the shop'|trans
+} %}
+
+<div class="qc-field">
+    <label class="qc-label">{{ 'Where the products come from'|trans }}</label>
+    <input type="hidden" name="{{ placement }}_SOURCES_SUBMITTED" value="1">
+
+    <div class="qc-stack" style="gap:6px">
+        {% for zrodlo in sourceList %}
+            <label style="display:flex; gap:8px; align-items:center">
+                <input type="checkbox" class="qc-checkbox" name="{{ placement }}_SOURCES[]" value="{{ zrodlo }}"{{ zrodlo in selected ? ' checked' }}>
+                <span>{{ nazwy[zrodlo] }}</span>
+            </label>
+        {% endfor %}
+    </div>
+
+    <div class="qc-hint">{{ 'The shop takes products in this order until it has enough. Tick fewer to keep the suggestions closer to the product.'|trans }}</div>
+</div>

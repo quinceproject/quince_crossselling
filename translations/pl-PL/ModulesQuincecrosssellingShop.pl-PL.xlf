@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en-US" target-language="pl-PL" datatype="plaintext" original="ModulesQuincecrosssellingShop">
+    <body>
+
+      <!-- Tytuł sekcji, gdy sklep nie wpisał własnego -->
+      <trans-unit id="quince.crossselling.sklep.tytul">
+        <source>You might also need</source>
+        <target>Może Ci się przydać</target>
+      </trans-unit>
+
+      <!-- Zdanie pod tytułem na stronie koszyka, gdy do progu darmowej dostawy czegoś brakuje -->
+      <trans-unit id="quince.crossselling.sklep.prog">
+        <source>Add %amount% more to get free delivery.</source>
+        <target>Do darmowej dostawy brakuje %amount%.</target>
+      </trans-unit>
+
+    </body>
+  </file>
+</xliff>

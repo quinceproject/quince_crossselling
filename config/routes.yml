@@ -1,0 +1,29 @@
+# Ekran modułu w panelu silnika.
+#
+# _legacy_controller wskazuje zakładkę silnika, bo moduł bez niego i tak nie działa
+# (zadeklarowana zależność). Dzięki temu nie zakładamy własnej zakładki tylko po to,
+# żeby PrestaShop miał gdzie sprawdzić uprawnienia.
+
+quince_crossselling_settings:
+  path: quince/cross-selling
+  methods: [GET]
+  defaults:
+    _controller: Quince\CrossSelling\Controller\Admin\SettingsController::indexAction
+    _legacy_controller: 'AdminQuince'
+    _legacy_link: 'AdminQuince'
+
+quince_crossselling_settings_save:
+  path: quince/cross-selling/save
+  methods: [POST]
+  defaults:
+    _controller: Quince\CrossSelling\Controller\Admin\SettingsController::saveAction
+    _legacy_controller: 'AdminQuince'
+    _legacy_link: 'AdminQuince:save'
+
+quince_crossselling_rebuild:
+  path: quince/cross-selling/rebuild
+  methods: [POST]
+  defaults:
+    _controller: Quince\CrossSelling\Controller\Admin\SettingsController::rebuildAction
+    _legacy_controller: 'AdminQuince'
+    _legacy_link: 'AdminQuince:save'

@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en-US" target-language="pl-PL" datatype="plaintext" original="ModulesQuincecrosssellingAdmin">
+    <body>
+
+      <!-- Moduł na liście modułów i w menu -->
+      <trans-unit id="quince.crossselling.nazwa">
+        <source>Quince Cross-selling</source>
+        <target>Quince: cross-selling</target>
+      </trans-unit>
+      <trans-unit id="quince.crossselling.opis">
+        <source>Products to add on the product page, in the cart and after the order, picked from order history, accessories, category and best sellers. Requires Quince Engine.</source>
+        <target>Produkty do dokupienia na karcie produktu, w koszyku i po złożeniu zamówienia, dobierane z historii zamówień, akcesoriów, kategorii i bestsellerów. Wymaga modułu Quince Engine.</target>
+      </trans-unit>
+      <trans-unit id="quince.crossselling.etykieta">
+        <source>Cross-selling</source>
+        <target>Cross-selling</target>
+      </trans-unit>
+
+      <!-- Komunikaty po akcji -->
+      <trans-unit id="quince.crossselling.zapisano">
+        <source>Settings saved.</source>
+        <target>Ustawienia zapisane.</target>
+      </trans-unit>
+      <trans-unit id="quince.crossselling.przeliczono">
+        <source>Bought together recalculated from the order history.</source>
+        <target>Przeliczono „kupowane razem” z historii zamówień.</target>
+      </trans-unit>
+
+      <!-- Ekran ustawień -->
+      <trans-unit id="quince.crossselling.wstep">
+        <source>Suggests products to add: under the product, in the cart, in the cart drawer and after the order. Each place has its own settings below.</source>
+        <target>Podpowiada produkty do dokupienia: pod produktem, w koszyku, w szufladzie koszyka i po złożeniu zamówienia. Każde z tych miejsc ma poniżej własne ustawienia.</target>
+      </trans-unit>
+      <trans-unit id="quince.crossselling.zapisz">
+        <source>Save changes</source>
+        <target>Zapisz zmiany</target>
+      </trans-unit>
+
+      <!-- Zasady wspólne -->
+      <trans-unit id="quince.crossselling.zasady.tytul">
+        <source>Which products can be suggested</source>
+        <target>Jakie produkty można podpowiadać</target>
+      </trans-unit>
+      <trans-unit id="quince.crossselling.zasady.opis">
+        <source>Rules that apply in every place.</source>
+        <target>Zasady wspólne dla wszystkich miejsc.</target>
+      </trans-unit>
+      <trans-unit id="quince.crossselling.dokupienia">
+        <source>Only products the customer can add to the cart right away</source>
+        <target>Tylko produkty, które klient może od razu dodać do koszyka</target>
+      </trans-unit>
+      <trans-unit id="quince.crossselling.dokupienia.opis">
+        <source>Leaves out products that are out of stock, products with the price on request and products not available for ordering. Products you allow to order without stock still show.</source>
+        <target>Pomija produkty, których nie ma na stanie, produkty z ceną na zapytanie i produkty niedostępne do zamówienia. Produkty, które pozwalasz zamawiać bez stanu, nadal się pokazują.</target>
+      </trans-unit>
+      <trans-unit id="quince.crossselling.dostawa">
+        <source>In the cart, suggest products that get the customer to free delivery</source>
+        <target>W koszyku podpowiadaj produkty, które przybliżają klienta do darmowej dostawy</target>
+      </trans-unit>
+      <trans-unit id="quince.crossselling.dostawa.opis">
+        <source>While the cart is below %amount%, the cheapest products that close the gap come first, and a line under the heading says how much is missing.</source>
+        <target>Dopóki koszyk jest poniżej %amount%, najpierw stoją najtańsze produkty, które domykają brakującą kwotę, a zdanie pod nagłówkiem mówi, ile brakuje.</target>
+      </trans-unit>
+      <trans-unit id="quince.crossselling.dostawa.brak">
+        <source>Your shop has no free delivery threshold set (Shipping → Preferences), so this has no effect for now.</source>
+        <target>Sklep nie ma ustawionego progu darmowej dostawy (Wysyłka → Preferencje), więc na razie to ustawienie niczego nie zmienia.</target>
+      </trans-unit>
+
+      <!-- Kupowane razem -->
+      <trans-unit id="quince.crossselling.pary.tytul">
+        <source>Bought together in past orders</source>
+        <target>Kupowane razem w dotychczasowych zamówieniach</target>
+      </trans-unit>
+      <trans-unit id="quince.crossselling.pary.stan">
+        <source>Based on %orders% paid orders: %pairs% pairs of products bought together.</source>
+        <target>Opłacone zamówienia: %orders%. Pary produktów kupowanych razem: %pairs%.</target>
+      </trans-unit>
+      <trans-unit id="quince.crossselling.pary.data">
+        <source>Last recalculated in full: %date%.</source>
+        <target>Ostatnie pełne przeliczenie: %date%.</target>
+      </trans-unit>
+      <trans-unit id="quince.crossselling.pary.przelicz">
+        <source>Recalculate from order history</source>
+        <target>Przelicz z historii zamówień</target>
+      </trans-unit>
+      <trans-unit id="quince.crossselling.pary.opis">
+        <source>Every order that gets paid or cancelled updates this by itself. Recalculate after importing orders straight into the database, for example when moving from another shop.</source>
+        <target>Każde opłacone albo anulowane zamówienie aktualizuje to samo. Przelicz po wgraniu zamówień bezpośrednio do bazy, na przykład przy przenosinach z innego sklepu.</target>
+      </trans-unit>
+
+      <!-- Miejsca -->
+      <trans-unit id="quince.crossselling.karta">
+        <source>Product page</source>
+        <target>Karta produktu</target>
+      </trans-unit>
+      <trans-unit id="quince.crossselling.karta.opis">
+        <source>Whether the section shows, where it stands, how many products it has and whether it has arrows is set in</source>
+        <target>O tym, czy sekcja się pokazuje, gdzie stoi, ile ma produktów i czy ma strzałki, decydujesz w</target>
+      </trans-unit>
+      <trans-unit id="quince.crossselling.karta.link">
+        <source>Product page settings</source>
+        <target>ustawieniach karty produktu</target>
+      </trans-unit>
+      <trans-unit id="quince.crossselling.karta.zrodla">
+        <source>Accessories and products from the same category have their own sections on the product page. Ticking them here shows the same products twice.</source>
+        <target>Akcesoria i produkty z tej samej kategorii mają na karcie produktu własne sekcje. Zaznaczone tutaj pokażą te same produkty drugi raz.</target>
+      </trans-unit>
+      <trans-unit id="quince.crossselling.koszyk">
+        <source>Cart page</source>
+        <target>Strona koszyka</target>
+      </trans-unit>
+      <trans-unit id="quince.crossselling.koszyk.opis">
+        <source>A row of products under the cart, picked for what the customer already has in it.</source>
+        <target>Rząd produktów pod koszykiem, dobranych do tego, co klient już w nim ma.</target>
+      </trans-unit>
+      <trans-unit id="quince.crossselling.szuflada">
+        <source>Cart drawer</source>
+        <target>Szuflada koszyka</target>
+      </trans-unit>
+      <trans-unit id="quince.crossselling.szuflada.opis">
+        <source>A short list under the products in the cart drawer, with a button to add each one.</source>
+        <target>Krótka lista pod produktami w szufladzie koszyka, z przyciskiem dodania przy każdym.</target>
+      </trans-unit>
+      <trans-unit id="quince.crossselling.szuflada.liczba">
+        <source>Each product takes a whole row in the drawer, so keep it short.</source>
+        <target>Każdy produkt zajmuje w szufladzie cały wiersz, więc lista powinna być krótka.</target>
+      </trans-unit>
+      <trans-unit id="quince.crossselling.potwierdzenie">
+        <source>Order confirmation</source>
+        <target>Potwierdzenie zamówienia</target>
+      </trans-unit>
+      <trans-unit id="quince.crossselling.potwierdzenie.opis">
+        <source>A row of products under the order summary, picked for what the customer has just bought.</source>
+        <target>Rząd produktów pod podsumowaniem zamówienia, dobranych do tego, co klient właśnie kupił.</target>
+      </trans-unit>
+
+      <!-- Pola miejsc -->
+      <trans-unit id="quince.crossselling.liczba">
+        <source>Number of products</source>
+        <target>Liczba produktów</target>
+      </trans-unit>
+      <trans-unit id="quince.crossselling.naglowek">
+        <source>Section heading</source>
+        <target>Nagłówek sekcji</target>
+      </trans-unit>
+      <trans-unit id="quince.crossselling.naglowek.podpowiedz">
+        <source>You might also need</source>
+        <target>Może Ci się przydać</target>
+      </trans-unit>
+
+      <!-- Źródła -->
+      <trans-unit id="quince.crossselling.zrodla">
+        <source>Where the products come from</source>
+        <target>Skąd brać produkty</target>
+      </trans-unit>
+      <trans-unit id="quince.crossselling.zrodla.opis">
+        <source>The shop takes products in this order until it has enough. Tick fewer to keep the suggestions closer to the product.</source>
+        <target>Sklep bierze produkty w tej kolejności, aż zbierze ich dość. Zaznacz mniej źródeł, żeby podpowiedzi trzymały się bliżej produktu.</target>
+      </trans-unit>
+      <trans-unit id="quince.crossselling.zrodlo.akcesoria">
+        <source>Accessories assigned to the product</source>
+        <target>Akcesoria przypisane do produktu</target>
+      </trans-unit>
+      <trans-unit id="quince.crossselling.zrodlo.kategoria">
+        <source>Products from the same category</source>
+        <target>Produkty z tej samej kategorii</target>
+      </trans-unit>
+      <trans-unit id="quince.crossselling.zrodlo.bestsellery">
+        <source>Best sellers of the shop</source>
+        <target>Bestsellery sklepu</target>
+      </trans-unit>
+
+    </body>
+  </file>
+</xliff>

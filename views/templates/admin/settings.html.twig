@@ -1,0 +1,174 @@
+{# Ekran modułu w stylistyce silnika: ten sam layout, te same makra pól.
+   Moduł nie ma własnego CSS-u ani własnego sidebara — bierze je stąd. #}
+{% extends '@Modules/quince_engine/views/templates/admin/layout.html.twig' %}
+{% import '@Modules/quince_engine/views/templates/admin/_macros/icons.html.twig' as icons %}
+{% import '@Modules/quince_engine/views/templates/admin/_macros/fields.html.twig' as fields %}
+
+{% trans_default_domain 'Modules.Quincecrossselling.Admin' %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('../modules/quince_engine/views/js/vendor/alpine.min.js') ~ qcVer }}" defer></script>
+{% endblock %}
+
+{% block quince_intro %}
+    <div class="qc-alert qc-alert-info">
+        {{ icons.icon('info', 18, 'qc-alert-icon') }}
+        <div>
+            {{ 'Suggests products to add: under the product, in the cart, in the cart drawer and after the order. Each place has its own settings below.'|trans }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block quince_actions %}
+    <button type="submit" form="quince-crossselling" class="qc-btn qc-btn-primary">
+        {{ icons.icon('check', 14) }} {{ 'Save changes'|trans }}
+    </button>
+{% endblock %}
+
+{% block quince_body %}
+{# Osobny formularz dla działania, które nie zapisuje ustawień. #}
+<form id="quince-crossselling-rebuild" method="post" action="{{ path('quince_crossselling_rebuild') }}" hidden>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('quince_crossselling_rebuild') }}">
+</form>
+
+<form id="quince-crossselling" method="post" action="{{ path('quince_crossselling_settings_save') }}" class="qc-stack"
+      x-data="{
+          koszyk: {{ settings.CART_ENABLED == '1' ? 'true' : 'false' }},
+          szuflada: {{ settings.DRAWER_ENABLED == '1' ? 'true' : 'false' }},
+          potwierdzenie: {{ settings.CONFIRMATION_ENABLED == '1' ? 'true' : 'false' }}
+      }">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('quince_crossselling_settings_save') }}">
+
+    {# ── 1. Zasady wspólne ── #}
+    <div class="qc-card">
+        <div class="qc-card-head">
+            <div>
+                <div class="qc-card-title">{{ 'Which products can be suggested'|trans }}</div>
+                <div class="qc-card-desc">{{ 'Rules that apply in every place.'|trans }}</div>
+            </div>
+        </div>
+
+        <div class="qc-card-body qc-stack">
+            {{ fields.toggle('PURCHASABLE_ONLY', settings.PURCHASABLE_ONLY == '1', 'Only products the customer can add to the cart right away'|trans) }}
+            <div class="qc-hint">{{ 'Leaves out products that are out of stock, products with the price on request and products not available for ordering. Products you allow to order without stock still show.'|trans }}</div>
+
+            {{ fields.toggle('FREE_SHIPPING', settings.FREE_SHIPPING == '1', 'In the cart, suggest products that get the customer to free delivery'|trans) }}
+            <div class="qc-hint">
+                {% if freeShippingThreshold > 0 %}
+                    {{ 'While the cart is below %amount%, the cheapest products that close the gap come first, and a line under the heading says how much is missing.'|trans({'%amount%': freeShippingThreshold|number_format(2, ',', ' ') ~ ' ' ~ currencySign}) }}
+                {% else %}
+                    {{ 'Your shop has no free delivery threshold set (Shipping → Preferences), so this has no effect for now.'|trans }}
+                {% endif %}
+            </div>
+
+            <div class="qc-field">
+                <label class="qc-label">{{ 'Bought together in past orders'|trans }}</label>
+                <div class="qc-hint">
+                    {{ 'Based on %orders% paid orders: %pairs% pairs of products bought together.'|trans({'%orders%': pairs.orders, '%pairs%': pairs.pairs}) }}
+                    {% if pairs.builtAt %}
+                        {{ 'Last recalculated in full: %date%.'|trans({'%date%': pairs.builtAt|date('d.m.Y H:i')}) }}
+                    {% endif %}
+                </div>
+                <div>
+                    <button type="submit" form="quince-crossselling-rebuild" class="qc-btn qc-btn-outline">
+                        {{ icons.icon('refresh', 14) }} {{ 'Recalculate from order history'|trans }}
+                    </button>
+                </div>
+                <div class="qc-hint">{{ 'Every order that gets paid or cancelled updates this by itself. Recalculate after importing orders straight into the database, for example when moving from another shop.'|trans }}</div>
+            </div>
+        </div>
+    </div>
+
+    {# ── 2. Karta produktu ── #}
+    <div class="qc-card">
+        <div class="qc-card-head">
+            <div>
+                <div class="qc-card-title">{{ 'Product page'|trans }}</div>
+                <div class="qc-card-desc">
+                    {{ 'Whether the section shows, where it stands, how many products it has and whether it has arrows is set in'|trans }}
+                    <a href="{{ path('quince_product') }}">{{ 'Product page settings'|trans }}</a>.
+                </div>
+            </div>
+        </div>
+
+        <div class="qc-card-body qc-stack">
+            {{ fields.multilang('PRODUCT_TITLE', 'Section heading'|trans, languages, translations.PRODUCT_TITLE, 'You might also need'|trans) }}
+
+            {% include '@Modules/quince_crossselling/views/templates/admin/_sources.html.twig' with {placement: 'PRODUCT', selected: sources.PRODUCT} %}
+
+            <div class="qc-hint">{{ 'Accessories and products from the same category have their own sections on the product page. Ticking them here shows the same products twice.'|trans }}</div>
+        </div>
+    </div>
+
+    {# ── 3. Koszyk ── #}
+    <div class="qc-card">
+        <div class="qc-card-head">
+            <div>
+                <div class="qc-card-title">{{ 'Cart page'|trans }}</div>
+                <div class="qc-card-desc">{{ 'A row of products under the cart, picked for what the customer already has in it.'|trans }}</div>
+            </div>
+            {{ fields.toggle('CART_ENABLED', settings.CART_ENABLED == '1', '', '', 'koszyk') }}
+        </div>
+
+        <div class="qc-card-body qc-stack" x-show="koszyk" x-cloak>
+            <div class="qc-field" style="max-inline-size:220px">
+                <label class="qc-label" for="q-cart-count">{{ 'Number of products'|trans }}</label>
+                <input type="number" class="qc-field-base qc-focusable" id="q-cart-count" name="CART_COUNT"
+                       value="{{ settings.CART_COUNT }}" min="{{ limits.countMin }}" max="{{ limits.countMax }}" step="1">
+            </div>
+
+            {{ fields.multilang('CART_TITLE', 'Section heading'|trans, languages, translations.CART_TITLE, 'You might also need'|trans) }}
+
+            {% include '@Modules/quince_crossselling/views/templates/admin/_sources.html.twig' with {placement: 'CART', selected: sources.CART} %}
+        </div>
+    </div>
+
+    {# ── 4. Szuflada koszyka ── #}
+    <div class="qc-card">
+        <div class="qc-card-head">
+            <div>
+                <div class="qc-card-title">{{ 'Cart drawer'|trans }}</div>
+                <div class="qc-card-desc">{{ 'A short list under the products in the cart drawer, with a button to add each one.'|trans }}</div>
+            </div>
+            {{ fields.toggle('DRAWER_ENABLED', settings.DRAWER_ENABLED == '1', '', '', 'szuflada') }}
+        </div>
+
+        <div class="qc-card-body qc-stack" x-show="szuflada" x-cloak>
+            <div class="qc-field" style="max-inline-size:220px">
+                <label class="qc-label" for="q-drawer-count">{{ 'Number of products'|trans }}</label>
+                <input type="number" class="qc-field-base qc-focusable" id="q-drawer-count" name="DRAWER_COUNT"
+                       value="{{ settings.DRAWER_COUNT }}" min="{{ limits.countMin }}" max="{{ limits.countMax }}" step="1">
+                <div class="qc-hint">{{ 'Each product takes a whole row in the drawer, so keep it short.'|trans }}</div>
+            </div>
+
+            {{ fields.multilang('DRAWER_TITLE', 'Section heading'|trans, languages, translations.DRAWER_TITLE, 'You might also need'|trans) }}
+
+            {% include '@Modules/quince_crossselling/views/templates/admin/_sources.html.twig' with {placement: 'DRAWER', selected: sources.DRAWER} %}
+        </div>
+    </div>
+
+    {# ── 5. Potwierdzenie zamówienia ── #}
+    <div class="qc-card">
+        <div class="qc-card-head">
+            <div>
+                <div class="qc-card-title">{{ 'Order confirmation'|trans }}</div>
+                <div class="qc-card-desc">{{ 'A row of products under the order summary, picked for what the customer has just bought.'|trans }}</div>
+            </div>
+            {{ fields.toggle('CONFIRMATION_ENABLED', settings.CONFIRMATION_ENABLED == '1', '', '', 'potwierdzenie') }}
+        </div>
+
+        <div class="qc-card-body qc-stack" x-show="potwierdzenie" x-cloak>
+            <div class="qc-field" style="max-inline-size:220px">
+                <label class="qc-label" for="q-confirmation-count">{{ 'Number of products'|trans }}</label>
+                <input type="number" class="qc-field-base qc-focusable" id="q-confirmation-count" name="CONFIRMATION_COUNT"
+                       value="{{ settings.CONFIRMATION_COUNT }}" min="{{ limits.countMin }}" max="{{ limits.countMax }}" step="1">
+            </div>
+
+            {{ fields.multilang('CONFIRMATION_TITLE', 'Section heading'|trans, languages, translations.CONFIRMATION_TITLE, 'You might also need'|trans) }}
+
+            {% include '@Modules/quince_crossselling/views/templates/admin/_sources.html.twig' with {placement: 'CONFIRMATION', selected: sources.CONFIRMATION} %}
+        </div>
+    </div>
+</form>
+{% endblock %}
