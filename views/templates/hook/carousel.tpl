@@ -1,5 +1,5 @@
 {**
- * Quince Cross-selling — podpowiedzi w karuzeli.
+ * Quince Cross-selling: podpowiedzi w karuzeli.
  *
  * Moduł dobiera produkty, a wygląd bierze z motywu: ta sama karuzela i ta sama
  * zajawka, co akcesoria i ostatnio oglądane.

@@ -1,5 +1,5 @@
 {**
- * Quince Cross-selling — dokupka w szufladzie koszyka.
+ * Quince Cross-selling: dokupka w szufladzie koszyka.
  *
  * W szufladzie nie mieści się karuzela, więc podpowiedzi idą listą krótkich
  * wierszy: miniatura, nazwa z ceną i przycisk dodania. Dodanie robi skrypt

@@ -24,7 +24,7 @@ use Quince\CrossSelling\Recommendation\Recommender;
 use Quince\CrossSelling\Settings\CrossSellingSettings;
 
 /**
- * Quince Cross-selling — podpowiedzi produktów do dokupienia.
+ * Quince Cross-selling: podpowiedzi produktów do dokupienia.
  *
  * Cztery miejsca: karta produktu, koszyk, szuflada koszyka i potwierdzenie
  * zamówienia. Wszystkie korzystają z jednego doboru (`Recommender`), a różnią
@@ -524,7 +524,7 @@ class Quince_Crossselling extends Module
     }
 
     /**
-     * Produkty w postaci, której oczekuje zajawka motywu — ta sama, co na
+     * Produkty w postaci, której oczekuje zajawka motywu: ta sama, co na
      * listingu, żeby karta wyglądała wszędzie tak samo.
      *
      * @param int[] $ids

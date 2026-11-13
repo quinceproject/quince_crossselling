@@ -16,7 +16,7 @@ if (!defined('_PS_VERSION_')) {
 use Quince\CrossSelling\Recommendation\BoughtTogether;
 
 /**
- * 0.2.0 — „kupowane razem" z tabeli par zamiast liczenia z historii zamówień
+ * 0.2.0: „kupowane razem" z tabeli par zamiast liczenia z historii zamówień
  * przy każdym wyświetleniu.
  *
  * Tabela powstaje od razu wypełniona z opłaconych zamówień, a hook zmiany

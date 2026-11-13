@@ -1,5 +1,5 @@
 {**
- * Quince Cross-selling — dokupka na stronie koszyka.
+ * Quince Cross-selling: dokupka na stronie koszyka.
  *
  * Krótka lista pod pozycjami koszyka, obok karuzeli pod spodem (osobne
  * ustawienie, `PLACEMENT_CART`). Dodanie robi skrypt rdzenia, jak przy

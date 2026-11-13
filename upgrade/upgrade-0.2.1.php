@@ -14,7 +14,7 @@ if (!defined('_PS_VERSION_')) {
 }
 
 /**
- * 0.2.1 — czwarte miejsce: krótka lista „Nie zapomnij" na stronie koszyka,
+ * 0.2.1: czwarte miejsce: krótka lista „Nie zapomnij" na stronie koszyka,
  * obok karuzeli pod spodem. Osobne ustawienie (`PLACEMENT_CART` ma już
  * karuzelę; ta lista dostaje własny hook, bo stoi w innym miejscu strony).
  *

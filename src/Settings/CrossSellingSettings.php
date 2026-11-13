@@ -96,7 +96,7 @@ final class CrossSellingSettings
         'CONFIRMATION_SOURCES' => '["bought","accessories","category","bestsellers"]',
     ];
 
-    /** Klucze wielojęzyczne — wartość trzymana jako JSON `{"1":"…","2":"…"}`. */
+    /** Klucze wielojęzyczne: wartość trzymana jako JSON `{"1":"…","2":"…"}`. */
     private const TRANSLATABLE = ['PRODUCT_TITLE', 'CART_TITLE', 'DRAWER_TITLE', 'CONFIRMATION_TITLE'];
 
     /** @return array<string,string> */
@@ -128,7 +128,7 @@ final class CrossSellingSettings
         return $this->all()['FREE_SHIPPING'] === '1';
     }
 
-    /** Karta produktu jest zawsze „włączona" — o jej obecności decyduje panel strony produktu. */
+    /** Karta produktu jest zawsze „włączona"; o jej obecności decyduje panel strony produktu. */
     public function enabled(string $placement): bool
     {
         if ($placement === self::PLACEMENT_PRODUCT) {
@@ -161,7 +161,7 @@ final class CrossSellingSettings
         ));
     }
 
-    /** Tytuł sekcji w bieżącym języku, a bez tłumaczenia — zapasowy. */
+    /** Tytuł sekcji w bieżącym języku, a bez tłumaczenia zapasowy. */
     public function title(string $placement, int $idLang, string $zapasowy): string
     {
         $wartosci = $this->decode($this->all()[$placement . '_TITLE'] ?? '');
