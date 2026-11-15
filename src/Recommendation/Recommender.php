@@ -11,6 +11,10 @@ declare(strict_types=1);
 
 namespace Quince\CrossSelling\Recommendation;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 use Configuration;
 use Context;
 use Db;

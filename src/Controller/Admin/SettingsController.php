@@ -11,6 +11,10 @@ declare(strict_types=1);
 
 namespace Quince\CrossSelling\Controller\Admin;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 use Configuration;
 use PrestaShopBundle\Security\Attribute\AdminSecurity;
 use Quince\CrossSelling\Recommendation\BoughtTogether;
