@@ -215,6 +215,10 @@ final class Recommender
             return false;
         }
 
+        if (!$this->dostepnyDlaGrupy($idProduct, $idShop)) {
+            return false;
+        }
+
         if (!$tylkoDoKupienia) {
             return true;
         }
@@ -228,6 +232,34 @@ final class Recommender
         }
 
         return (bool) Product::isAvailableWhenOutOfStock(StockAvailable::outOfStock($idProduct, $idShop));
+    }
+
+    /**
+     * Czy grupa klienta ma prawo do którejś z kategorii produktu.
+     *
+     * Kategoria bez prawa dostępu ukrywa produkt na listingu i na jego stronie,
+     * więc podpowiedź prowadziłaby do „nie znaleziono" albo zdradzała produkt
+     * przeznaczony dla innej grupy. Ten sam warunek co w quince_search.
+     */
+    private function dostepnyDlaGrupy(int $idProduct, int $idShop): bool
+    {
+        $grupy = Context::getContext()->customer !== null
+            ? Context::getContext()->customer->getGroups()
+            : [(int) Configuration::get('PS_UNIDENTIFIED_GROUP')];
+
+        $grupy = array_map('intval', $grupy ?: [(int) Configuration::get('PS_UNIDENTIFIED_GROUP')]);
+
+        return (bool) Db::getInstance()->getValue(
+            'SELECT 1
+             FROM `' . _DB_PREFIX_ . 'category_product` cp
+             INNER JOIN `' . _DB_PREFIX_ . 'category_shop` cs
+                 ON cs.id_category = cp.id_category AND cs.id_shop = ' . $idShop . '
+             INNER JOIN `' . _DB_PREFIX_ . 'category` c
+                 ON c.id_category = cp.id_category AND c.active = 1
+             INNER JOIN `' . _DB_PREFIX_ . 'category_group` cg
+                 ON cg.id_category = cp.id_category AND cg.id_group IN (' . implode(',', $grupy) . ')
+             WHERE cp.id_product = ' . $idProduct
+        );
     }
 
     /**
