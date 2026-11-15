@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace Quince\CrossSelling\Controller\Admin;
 
 use Configuration;
+use PrestaShopBundle\Security\Attribute\AdminSecurity;
 use Quince\CrossSelling\Recommendation\BoughtTogether;
 use Quince\CrossSelling\Settings\CrossSellingSettings;
 use Quince\Engine\Controller\Admin\QuinceController;
@@ -33,6 +34,7 @@ class SettingsController extends QuinceController
     {
     }
 
+    #[AdminSecurity("is_granted('read', request.get('_legacy_controller'))", message: 'You do not have permission to view this.')]
     public function indexAction(): Response
     {
         return $this->renderPanel(
@@ -61,6 +63,7 @@ class SettingsController extends QuinceController
         );
     }
 
+    #[AdminSecurity("is_granted('update', request.get('_legacy_controller'))", message: 'You do not have permission to change this.')]
     public function saveAction(Request $request): RedirectResponse
     {
         if (!$this->isCsrfTokenValid('quince_crossselling_settings_save', $request->request->get('_csrf_token'))) {
@@ -76,6 +79,7 @@ class SettingsController extends QuinceController
     }
 
     /** Przeliczenie „kupowanych razem" od nowa z historii zamówień. */
+    #[AdminSecurity("is_granted('update', request.get('_legacy_controller'))", message: 'You do not have permission to change this.')]
     public function rebuildAction(Request $request): RedirectResponse
     {
         if (!$this->isCsrfTokenValid('quince_crossselling_rebuild', $request->request->get('_csrf_token'))) {
