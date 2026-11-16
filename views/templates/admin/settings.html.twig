@@ -86,18 +86,19 @@
             <div>
                 <div class="qc-card-title">{{ 'Product page'|trans }}</div>
                 <div class="qc-card-desc">
-                    {{ 'Whether the section shows, where it stands, how many products it has and whether it has arrows is set in'|trans }}
+                    {{ 'Whether the section shows, where it stands, what its title is, how many products it has and whether it has arrows is set in'|trans }}
                     <a href="{{ path('quince_product') }}">{{ 'Product page settings'|trans }}</a>.
                 </div>
             </div>
         </div>
 
         <div class="qc-card-body qc-stack">
-            {{ fields.multilang('PRODUCT_TITLE', 'Section heading'|trans, languages, translations.PRODUCT_TITLE, 'You might also need'|trans) }}
-
+            {# Tytuł tej karuzeli ustawia ekran strony produktu w silniku, razem
+               z tytułami pozostałych karuzel. Zapisany tu wcześniej tytuł zostaje
+               w bazie i jest tytułem, dopóki tamten ekran go nie nadpisze. #}
             {% include '@Modules/quince_crossselling/views/templates/admin/_sources.html.twig' with {placement: 'PRODUCT', selected: sources.PRODUCT} %}
 
-            <div class="qc-hint">{{ 'Accessories and products from the same category have their own sections on the product page. Ticking them here shows the same products twice.'|trans }}</div>
+            <div class="qc-hint">{{ 'Accessories, products from the same category, spare parts and set items have their own sections on the product page. Ticking them here shows the same products twice.'|trans }}</div>
         </div>
     </div>
 

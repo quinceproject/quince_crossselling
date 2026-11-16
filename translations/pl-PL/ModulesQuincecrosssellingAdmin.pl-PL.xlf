@@ -95,16 +95,48 @@
         <target>Karta produktu</target>
       </trans-unit>
       <trans-unit id="quince.crossselling.karta.opis">
-        <source>Whether the section shows, where it stands, how many products it has and whether it has arrows is set in</source>
-        <target>O tym, czy sekcja się pokazuje, gdzie stoi, ile ma produktów i czy ma strzałki, decydujesz w</target>
+        <source>Whether the section shows, where it stands, what its title is, how many products it has and whether it has arrows is set in</source>
+        <target>O tym, czy sekcja się pokazuje, gdzie stoi, jaki ma tytuł, ile ma produktów i czy ma strzałki, decydujesz w</target>
       </trans-unit>
       <trans-unit id="quince.crossselling.karta.link">
         <source>Product page settings</source>
         <target>ustawieniach karty produktu</target>
       </trans-unit>
       <trans-unit id="quince.crossselling.karta.zrodla">
-        <source>Accessories and products from the same category have their own sections on the product page. Ticking them here shows the same products twice.</source>
-        <target>Akcesoria i produkty z tej samej kategorii mają na karcie produktu własne sekcje. Zaznaczone tutaj pokażą te same produkty drugi raz.</target>
+        <source>Accessories, products from the same category, spare parts and set items have their own sections on the product page. Ticking them here shows the same products twice.</source>
+        <target>Akcesoria, produkty z tej samej kategorii, części zamienne i elementy zestawu mają na karcie produktu własne sekcje. Zaznaczone tutaj pokażą te same produkty drugi raz.</target>
+      </trans-unit>
+      <trans-unit id="quince.crossselling.zrodlo.czesci">
+        <source>Spare parts of the product</source>
+        <target>Części zamienne produktu</target>
+      </trans-unit>
+      <trans-unit id="quince.crossselling.zrodlo.pasuje">
+        <source>Products this part fits</source>
+        <target>Produkty, do których pasuje ta część</target>
+      </trans-unit>
+      <trans-unit id="quince.crossselling.zrodlo.elementy">
+        <source>Set items</source>
+        <target>Elementy zestawu</target>
+      </trans-unit>
+      <trans-unit id="quince.crossselling.zrodlo.zestawy">
+        <source>Sets this product is in</source>
+        <target>Zestawy, w których jest ten produkt</target>
+      </trans-unit>
+      <trans-unit id="quince.crossselling.pole.czesci">
+        <source>Spare parts list</source>
+        <target>Lista części zamiennych</target>
+      </trans-unit>
+      <trans-unit id="quince.crossselling.pole.elementy">
+        <source>Set items list</source>
+        <target>Lista elementów zestawu</target>
+      </trans-unit>
+      <trans-unit id="quince.crossselling.pole.czesci.opis">
+        <source>Item numbers (SKU) of spare parts for this product, separated by commas, in the order to show. A number the shop does not have yet shows up once that product is added.</source>
+        <target>Numery artykułów (SKU) części zamiennych tego produktu, po przecinku, w kolejności wyświetlania. Numer, którego sklep jeszcze nie ma, pokaże się, gdy ten produkt zostanie dodany.</target>
+      </trans-unit>
+      <trans-unit id="quince.crossselling.pole.elementy.opis">
+        <source>Item numbers (SKU) of the items in this set, separated by commas, in the order to show. This does not make the product a pack: its stock and price stay its own.</source>
+        <target>Numery artykułów (SKU) elementów tego zestawu, po przecinku, w kolejności wyświetlania. Produkt nie staje się przez to pakietem: stan i cena zostają jego własne.</target>
       </trans-unit>
       <trans-unit id="quince.crossselling.koszyk">
         <source>Cart page</source>

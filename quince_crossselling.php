@@ -19,6 +19,7 @@ use PrestaShop\PrestaShop\Adapter\Image\ImageRetriever;
 use PrestaShop\PrestaShop\Adapter\Presenter\Product\ProductListingPresenter;
 use PrestaShop\PrestaShop\Adapter\Product\PriceFormatter;
 use PrestaShop\PrestaShop\Adapter\Product\ProductColorsRetriever;
+use Quince\CrossSelling\Lists\ProductLists;
 use Quince\CrossSelling\Recommendation\BoughtTogether;
 use Quince\CrossSelling\Recommendation\Recommender;
 use Quince\CrossSelling\Settings\CrossSellingSettings;
@@ -49,11 +50,29 @@ class Quince_Crossselling extends Module
     /** Krótka lista pod pozycjami na stronie koszyka, obok karuzeli pod spodem. */
     public const HOOK_CART_SUGGEST = 'displayQuinceCartSuggest';
 
+    /**
+     * Karuzele list wpisanych przy produkcie: części zamienne, „pasuje do",
+     * elementy zestawu, „w zestawach". Którą rysować, mówi parametr qLista.
+     */
+    public const HOOK_LISTS = 'displayQuinceProductList';
+
+    /**
+     * Karuzele list: pole produktu, kierunek i domyślny tytuł.
+     *
+     * @var array<string,array{0:string,1:bool,2:string}>
+     */
+    private const LISTS = [
+        CrossSellingSettings::SOURCE_SPARE_PARTS => [ProductLists::SPARE_PARTS, false, 'Spare parts'],
+        CrossSellingSettings::SOURCE_SPARE_PARTS_FOR => [ProductLists::SPARE_PARTS, true, 'Fits'],
+        CrossSellingSettings::SOURCE_SET_ITEMS => [ProductLists::SET_ITEMS, false, 'Set items'],
+        CrossSellingSettings::SOURCE_IN_SETS => [ProductLists::SET_ITEMS, true, 'In sets'],
+    ];
+
     public function __construct()
     {
         $this->name = 'quince_crossselling';
         $this->tab = 'front_office_features';
-        $this->version = '0.2.4';
+        $this->version = '0.3.0';
         $this->author = 'Quince Project';
         $this->need_instance = 0;
         $this->ps_versions_compliancy = ['min' => '9.0.0', 'max' => '9.99.99'];
@@ -92,6 +111,7 @@ class Quince_Crossselling extends Module
             && $this->registerHook($this->hooks())
             && $this->installModuleGroups()
             && $this->setDefaults()
+            && $this->installListFields()
             && $this->policzParyZHistorii();
     }
 
@@ -101,7 +121,69 @@ class Quince_Crossselling extends Module
             Configuration::deleteByName($key);
         }
 
+        // Definicje pól znikają, wpisane numery zostają: ponowna instalacja
+        // przywraca listy bez wysyłania ich jeszcze raz.
+        foreach (ProductLists::FIELDS as $pole) {
+            $this->unregisterExtraProperty(new \PrestaShop\PrestaShop\Core\ExtraProperty\Definition\ExtraPropertyDefinition(
+                entityName: 'product',
+                propertyName: $pole,
+                type: \PrestaShop\PrestaShop\Core\ExtraProperty\Definition\ExtraPropertyType::STRING,
+                scope: \PrestaShop\PrestaShop\Core\ExtraProperty\Definition\ExtraPropertyScope::SHOP,
+                moduleName: $this->name
+            ), false);
+        }
+
         return BoughtTogether::dropTable() && parent::uninstall();
+    }
+
+    /**
+     * Pola produktu na części zamienne i elementy zestawu.
+     *
+     * Pole dodatkowe rdzenia: stoi w formularzu produktu za akcesoriami, wchodzi
+     * do Admin API produktu, więc katalog wysyła listy razem z produktem. Zakres
+     * sklepowy, bo numer artykułu nie zależy od języka.
+     *
+     * Publiczne, bo woła je też aktualizacja 0.3.0.
+     */
+    public function installListFields(): bool
+    {
+        $pola = [
+            // Etykiety inne niż nazwy źródeł: `labelWording` nadpisuje tłumaczenie
+            // tego samego napisu w domenie modułu.
+            ProductLists::SPARE_PARTS => [
+                'Spare parts list',
+                'Item numbers (SKU) of spare parts for this product, separated by commas, in the order to show. A number the shop does not have yet shows up once that product is added.',
+            ],
+            ProductLists::SET_ITEMS => [
+                'Set items list',
+                'Item numbers (SKU) of the items in this set, separated by commas, in the order to show. This does not make the product a pack: its stock and price stay its own.',
+            ],
+        ];
+
+        // Każde pole staje zaraz za akcesoriami, więc ostatnie zarejestrowane
+        // stoi najwyżej. Odwrotna kolejność daje części nad elementami zestawu.
+        foreach (array_reverse($pola, true) as $pole => [$etykieta, $opis]) {
+            $zapisane = $this->registerExtraProperty(new \PrestaShop\PrestaShop\Core\ExtraProperty\Definition\ExtraPropertyDefinition(
+                entityName: 'product',
+                propertyName: $pole,
+                type: \PrestaShop\PrestaShop\Core\ExtraProperty\Definition\ExtraPropertyType::STRING,
+                scope: \PrestaShop\PrestaShop\Core\ExtraProperty\Definition\ExtraPropertyScope::SHOP,
+                size: ProductLists::FIELD_SIZE,
+                displayFront: false,
+                associatedForms: ['product:description.related_products:after'],
+                associatedApis: ['/products', '/products/{productId}'],
+                labelWording: $etykieta,
+                labelDomain: self::DOMENA_PANELU,
+                descriptionWording: $opis,
+                descriptionDomain: self::DOMENA_PANELU
+            ));
+
+            if ($zapisane === false) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -124,6 +206,7 @@ class Quince_Crossselling extends Module
             self::HOOK_PRODUCT,
             self::HOOK_DRAWER,
             self::HOOK_CART_SUGGEST,
+            self::HOOK_LISTS,
             'displayCrossSellingShoppingCart',
             'displayOrderConfirmation2',
 
@@ -152,6 +235,10 @@ class Quince_Crossselling extends Module
             self::HOOK_CART_SUGGEST => [
                 'Quince:dokupka na stronie koszyka',
                 'Krótka lista „Nie zapomnij" pod pozycjami na stronie koszyka.',
+            ],
+            self::HOOK_LISTS => [
+                'Quince:listy produktu na karcie produktu',
+                'Części zamienne, pasuje do, elementy zestawu, w zestawach. Motyw podaje qLista, qIle, qStrzalki i qTytul z panelu strony produktu.',
             ],
         ];
 
@@ -306,6 +393,14 @@ class Quince_Crossselling extends Module
             $pomin = array_merge($pomin, $this->akcesoria($idProduct));
         }
 
+        // To samo z listami produktu: części i elementy zestawu mają własne
+        // karuzele, więc bez wyboru jako źródło nie wracają tu inną drogą.
+        foreach (self::LISTS as $zrodlo => [$pole, $odwrotnie]) {
+            if (!in_array($zrodlo, $zrodla, true)) {
+                $pomin = array_merge($pomin, $this->zListy($idProduct, $pole, $odwrotnie));
+            }
+        }
+
         $ids = (new Recommender())->recommend(
             [$idProduct],
             $pomin,
@@ -314,12 +409,60 @@ class Quince_Crossselling extends Module
             $ustawienia->purchasableOnly()
         );
 
-        return $this->karuzela($ids, 'crossselling', CrossSellingSettings::PLACEMENT_PRODUCT, [
+        $parametry = [
             'qcsIle' => $ile,
             'qcsStrzalki' => (bool) ($params['qStrzalki'] ?? true),
             'qcsKontener' => false,
             'qcsPodtytul' => '',
+        ];
+
+        // Tytuł ustawia ekran strony produktu w silniku. Pusty zostawia tytuł
+        // zapisany w ustawieniach tego modułu.
+        if (trim((string) ($params['qTytul'] ?? '')) !== '') {
+            $parametry['qcsTytul'] = trim((string) $params['qTytul']);
+        }
+
+        return $this->karuzela($ids, 'crossselling', CrossSellingSettings::PLACEMENT_PRODUCT, $parametry);
+    }
+
+    /**
+     * Karta produktu: karuzela jednej z list wpisanych przy produkcie.
+     *
+     * Pokazuje produkty widoczne w sklepie, także niedostępne do zamówienia:
+     * przy części zamiennej klient ma zobaczyć, że istnieje, i jej termin.
+     */
+    public function hookDisplayQuinceProductList(array $params): string
+    {
+        $lista = (string) ($params['qLista'] ?? '');
+        $idProduct = $this->idProduktu($params['product'] ?? null);
+
+        if ($idProduct <= 0 || !isset(self::LISTS[$lista])) {
+            return '';
+        }
+
+        [$pole, $odwrotnie, $domyslny] = self::LISTS[$lista];
+        $ile = max(1, (int) ($params['qIle'] ?? 8));
+        $ids = array_slice((new Recommender())->visible($this->zListy($idProduct, $pole, $odwrotnie)), 0, $ile);
+        $tytul = trim((string) ($params['qTytul'] ?? ''));
+
+        return $this->karuzela($ids, str_replace('_', '-', $lista), CrossSellingSettings::PLACEMENT_PRODUCT, [
+            'qcsIle' => $ile,
+            'qcsStrzalki' => (bool) ($params['qStrzalki'] ?? true),
+            'qcsKontener' => false,
+            'qcsPodtytul' => '',
+            'qcsTytul' => $tytul !== '' ? $tytul : $this->trans($domyslny, [], self::DOMENA_SKLEPU),
         ]);
+    }
+
+    /** @return int[] */
+    private function zListy(int $idProduct, string $pole, bool $odwrotnie): array
+    {
+        $listy = new ProductLists();
+        $idShop = (int) $this->context->shop->id;
+
+        return $odwrotnie
+            ? $listy->listing([$idProduct], $pole, $idShop)
+            : $listy->listed([$idProduct], $pole, $idShop);
     }
 
     /** Strona koszyka: karuzela pod koszykiem. */

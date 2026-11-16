@@ -19,6 +19,7 @@ use Configuration;
 use Context;
 use Db;
 use Product;
+use Quince\CrossSelling\Lists\ProductLists;
 use Quince\CrossSelling\Settings\CrossSellingSettings;
 use StockAvailable;
 
@@ -109,6 +110,18 @@ final class Recommender
 
             case CrossSellingSettings::SOURCE_ACCESSORIES:
                 return $this->akcesoria($zrodlowe, $limit);
+
+            case CrossSellingSettings::SOURCE_SPARE_PARTS:
+                return array_slice((new ProductLists())->listed($zrodlowe, ProductLists::SPARE_PARTS, $idShop), 0, $limit);
+
+            case CrossSellingSettings::SOURCE_SPARE_PARTS_FOR:
+                return array_slice((new ProductLists())->listing($zrodlowe, ProductLists::SPARE_PARTS, $idShop), 0, $limit);
+
+            case CrossSellingSettings::SOURCE_SET_ITEMS:
+                return array_slice((new ProductLists())->listed($zrodlowe, ProductLists::SET_ITEMS, $idShop), 0, $limit);
+
+            case CrossSellingSettings::SOURCE_IN_SETS:
+                return array_slice((new ProductLists())->listing($zrodlowe, ProductLists::SET_ITEMS, $idShop), 0, $limit);
 
             case CrossSellingSettings::SOURCE_CATEGORY:
                 return $this->zKategorii($zrodlowe, $limit, $idShop);
@@ -207,6 +220,25 @@ final class Recommender
      * na stanie albo z pozwoleniem na zamawianie bez stanu. Podpowiedź, której
      * nie da się dodać do koszyka, zabiera miejsce tej, którą dałoby się kupić.
      */
+    /**
+     * Produkty z listy, które klient może zobaczyć: aktywne, widoczne w katalogu
+     * i w kategorii dostępnej dla jego grupy. Niedostępny do zamówienia, ale
+     * widoczny, zostaje: przy częściach liczy się, że w ogóle istnieje.
+     *
+     * @param int[] $ids
+     *
+     * @return int[]
+     */
+    public function visible(array $ids): array
+    {
+        $idShop = (int) Context::getContext()->shop->id;
+
+        return array_values(array_filter(
+            array_map('intval', $ids),
+            fn (int $id): bool => $this->doPokazania($id, $idShop, false)
+        ));
+    }
+
     private function doPokazania(int $idProduct, int $idShop, bool $tylkoDoKupienia): bool
     {
         $produkt = Db::getInstance()->getRow(

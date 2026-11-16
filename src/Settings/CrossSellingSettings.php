@@ -44,6 +44,18 @@ final class CrossSellingSettings
     /** Akcesoria przypisane do produktu w katalogu. */
     public const SOURCE_ACCESSORIES = 'accessories';
 
+    /** Części zamienne wpisane przy produkcie. */
+    public const SOURCE_SPARE_PARTS = 'spare_parts';
+
+    /** Produkty, przy których ten produkt jest wpisany jako część zamienna. */
+    public const SOURCE_SPARE_PARTS_FOR = 'spare_parts_for';
+
+    /** Elementy zestawu wpisane przy produkcie. */
+    public const SOURCE_SET_ITEMS = 'set_items';
+
+    /** Zestawy, w których ten produkt jest elementem. */
+    public const SOURCE_IN_SETS = 'in_sets';
+
     /** Produkty z kategorii domyślnej. */
     public const SOURCE_CATEGORY = 'category';
 
@@ -59,6 +71,10 @@ final class CrossSellingSettings
     public const SOURCES = [
         self::SOURCE_BOUGHT,
         self::SOURCE_ACCESSORIES,
+        self::SOURCE_SPARE_PARTS,
+        self::SOURCE_SPARE_PARTS_FOR,
+        self::SOURCE_SET_ITEMS,
+        self::SOURCE_IN_SETS,
         self::SOURCE_CATEGORY,
         self::SOURCE_BESTSELLERS,
     ];
