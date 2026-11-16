@@ -122,19 +122,31 @@ class Quince_Crossselling extends Module
             Configuration::deleteByName($key);
         }
 
-        // Definicje pól znikają, wpisane numery zostają: ponowna instalacja
-        // przywraca listy bez wysyłania ich jeszcze raz.
+        $this->uninstallListFields();
+
+        return BoughtTogether::dropTable() && parent::uninstall();
+    }
+
+    /**
+     * Definicje pól list znikają, wpisane numery zostają (kolumny z danymi
+     * zostają w tabeli): ponowna instalacja przywraca listy bez wysyłania ich
+     * jeszcze raz. Publiczne, bo woła je też aktualizacja 0.3.1.
+     */
+    public function uninstallListFields(): bool
+    {
+        $wynik = true;
+
         foreach (ProductLists::FIELDS as $pole) {
-            $this->unregisterExtraProperty(new \PrestaShop\PrestaShop\Core\ExtraProperty\Definition\ExtraPropertyDefinition(
+            $wynik = $this->unregisterExtraProperty(new \PrestaShop\PrestaShop\Core\ExtraProperty\Definition\ExtraPropertyDefinition(
                 entityName: 'product',
                 propertyName: $pole,
                 type: \PrestaShop\PrestaShop\Core\ExtraProperty\Definition\ExtraPropertyType::STRING,
                 scope: \PrestaShop\PrestaShop\Core\ExtraProperty\Definition\ExtraPropertyScope::SHOP,
                 moduleName: $this->name
-            ), false);
+            ), false) && $wynik;
         }
 
-        return BoughtTogether::dropTable() && parent::uninstall();
+        return $wynik;
     }
 
     /**
