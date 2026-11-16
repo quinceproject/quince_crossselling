@@ -19,6 +19,7 @@ use PrestaShop\PrestaShop\Adapter\Image\ImageRetriever;
 use PrestaShop\PrestaShop\Adapter\Presenter\Product\ProductListingPresenter;
 use PrestaShop\PrestaShop\Adapter\Product\PriceFormatter;
 use PrestaShop\PrestaShop\Adapter\Product\ProductColorsRetriever;
+use Quince\CrossSelling\Form\ProductListType;
 use Quince\CrossSelling\Lists\ProductLists;
 use Quince\CrossSelling\Recommendation\BoughtTogether;
 use Quince\CrossSelling\Recommendation\Recommender;
@@ -72,7 +73,7 @@ class Quince_Crossselling extends Module
     {
         $this->name = 'quince_crossselling';
         $this->tab = 'front_office_features';
-        $this->version = '0.3.0';
+        $this->version = '0.3.1';
         $this->author = 'Quince Project';
         $this->need_instance = 0;
         $this->ps_versions_compliancy = ['min' => '9.0.0', 'max' => '9.99.99'];
@@ -143,8 +144,22 @@ class Quince_Crossselling extends Module
      * do Admin API produktu, więc katalog wysyła listy razem z produktem. Zakres
      * sklepowy, bo numer artykułu nie zależy od języka.
      *
-     * Publiczne, bo woła je też aktualizacja 0.3.0.
+     * Publiczne, bo wołają je też aktualizacje 0.3.0 i 0.3.1. Ponowna rejestracja
+     * nadpisuje definicję pola, wpisane listy zostają.
      */
+    /**
+     * Wyszukiwarka w polach list na karcie produktu w panelu. Wyłącznie tam.
+     */
+    public function hookActionAdminControllerSetMedia(): void
+    {
+        if (!in_array((string) Tools::getValue('controller'), ['AdminProducts', 'AdminProductsV2'], true)) {
+            return;
+        }
+
+        $this->context->controller->addCSS($this->_path . 'views/css/admin/product-lists.css');
+        $this->context->controller->addJS($this->_path . 'views/js/admin/product-lists.js');
+    }
+
     public function installListFields(): bool
     {
         $pola = [
@@ -152,11 +167,11 @@ class Quince_Crossselling extends Module
             // tego samego napisu w domenie modułu.
             ProductLists::SPARE_PARTS => [
                 'Spare parts list',
-                'Item numbers (SKU) of spare parts for this product, separated by commas, in the order to show. A number the shop does not have yet shows up once that product is added.',
+                'Spare parts of this product, in the order they show on the product page.',
             ],
             ProductLists::SET_ITEMS => [
                 'Set items list',
-                'Item numbers (SKU) of the items in this set, separated by commas, in the order to show. This does not make the product a pack: its stock and price stay its own.',
+                'Items of this set, in the order they show on the product page. This does not make the product a pack: its stock and price stay its own.',
             ],
         ];
 
@@ -172,6 +187,9 @@ class Quince_Crossselling extends Module
                 displayFront: false,
                 associatedForms: ['product:description.related_products:after'],
                 associatedApis: ['/products', '/products/{productId}'],
+                // Wyszukiwarka produktów jak „Produkty powiązane"; w bazie i w API
+                // zostaje lista SKU (zamiana w ProductListType).
+                formType: ProductListType::class,
                 labelWording: $etykieta,
                 labelDomain: self::DOMENA_PANELU,
                 descriptionWording: $opis,
@@ -207,6 +225,7 @@ class Quince_Crossselling extends Module
             self::HOOK_DRAWER,
             self::HOOK_CART_SUGGEST,
             self::HOOK_LISTS,
+            'actionAdminControllerSetMedia',
             'displayCrossSellingShoppingCart',
             'displayOrderConfirmation2',
 

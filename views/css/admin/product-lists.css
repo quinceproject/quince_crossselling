@@ -1,0 +1,44 @@
+/*
+ * Formularz produktu: układ pól „Lista części zamiennych" i „Lista elementów
+ * zestawu" taki sam jak „Produktów powiązanych".
+ *
+ * Rdzeń przypina te reguły do identyfikatora swojego pola
+ * (`#product_description_related_products` w product.css panelu), więc nasze
+ * pola ich nie dostają. Wartości przepisane z rdzenia bez zmian.
+ */
+.product-page-v2 [data-quince-product-list] .search-with-icon {
+    max-width: 377px;
+}
+
+.product-page-v2 [data-quince-product-list] .entities-list-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin: .5rem calc(-1 * .5rem);
+    margin: var(--cdk-size-8) calc(-1 * var(--cdk-size-8));
+}
+
+.product-page-v2 [data-quince-product-list] .related-product {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 180px;
+    margin: .5rem;
+    margin: var(--cdk-size-8);
+}
+
+.product-page-v2 [data-quince-product-list] .related-product-image {
+    margin-bottom: .5rem;
+    margin-bottom: var(--cdk-size-8);
+}
+
+.product-page-v2 [data-quince-product-list] .related-product-legend {
+    max-width: 100%;
+}
+
+.product-page-v2 [data-quince-product-list] .related-product-legend .text-preview {
+    display: inline-block;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

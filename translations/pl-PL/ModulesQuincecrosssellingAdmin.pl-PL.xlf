@@ -131,12 +131,16 @@
         <target>Lista elementów zestawu</target>
       </trans-unit>
       <trans-unit id="quince.crossselling.pole.czesci.opis">
-        <source>Item numbers (SKU) of spare parts for this product, separated by commas, in the order to show. A number the shop does not have yet shows up once that product is added.</source>
-        <target>Numery artykułów (SKU) części zamiennych tego produktu, po przecinku, w kolejności wyświetlania. Numer, którego sklep jeszcze nie ma, pokaże się, gdy ten produkt zostanie dodany.</target>
+        <source>Spare parts of this product, in the order they show on the product page.</source>
+        <target>Części zamienne tego produktu, w kolejności, w jakiej stoją na stronie produktu.</target>
       </trans-unit>
       <trans-unit id="quince.crossselling.pole.elementy.opis">
-        <source>Item numbers (SKU) of the items in this set, separated by commas, in the order to show. This does not make the product a pack: its stock and price stay its own.</source>
-        <target>Numery artykułów (SKU) elementów tego zestawu, po przecinku, w kolejności wyświetlania. Produkt nie staje się przez to pakietem: stan i cena zostają jego własne.</target>
+        <source>Items of this set, in the order they show on the product page. This does not make the product a pack: its stock and price stay its own.</source>
+        <target>Elementy tego zestawu, w kolejności, w jakiej stoją na stronie produktu. Produkt nie staje się przez to pakietem: stan i cena zostają jego własne.</target>
+      </trans-unit>
+      <trans-unit id="quince.crossselling.pole.nieznane">
+        <source>Item numbers the shop does not have yet: %list%. They stay on the list and show up once those products are added.</source>
+        <target>Numery, których sklep jeszcze nie ma: %list%. Zostają na liście i pokażą się, gdy te produkty trafią do sklepu.</target>
       </trans-unit>
       <trans-unit id="quince.crossselling.koszyk">
         <source>Cart page</source>
