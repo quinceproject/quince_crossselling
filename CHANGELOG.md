@@ -4,6 +4,15 @@ All notable changes to this module are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.2] - 2026-11-27
+
+### Fixed
+
+- The product page in the back office stopped with an error 500 when a spare parts or
+  set items list held a reference made of digits only (for example `123456`). PHP turns
+  such an array key into a number, and the list field accepts only text. References now
+  stay text everywhere the lists are read.
+
 ## [0.3.1] - 2026-11-16
 
 ### Added

@@ -70,7 +70,9 @@ final class ProductLists
             }
         }
 
-        return array_keys($wynik);
+        // Klucz złożony z samych cyfr („123456") PHP zamienia na liczbę, a numer
+        // artykułu ma zostać tekstem: formularz w panelu przyjmuje tylko tekst.
+        return array_map('strval', array_keys($wynik));
     }
 
     /**
@@ -120,7 +122,7 @@ final class ProductLists
         foreach ($this->zapytanie(sprintf(
             'SELECT id_product, reference FROM `%sproduct` WHERE reference IN (%s) ORDER BY id_product',
             _DB_PREFIX_,
-            implode(',', array_map(static fn (string $s): string => '"' . pSQL($s) . '"', array_keys($numery)))
+            implode(',', array_map(static fn ($s): string => '"' . pSQL((string) $s) . '"', array_keys($numery)))
         )) as $wiersz) {
             $poNumerze[(string) $wiersz['reference']][] = (int) $wiersz['id_product'];
         }
@@ -172,10 +174,10 @@ final class ProductLists
         // LIKE zawęża do wierszy, w których numer w ogóle występuje; dokładne
         // dopasowanie robi odczyt listy, bo „AB-1" siedzi też w „AB-10".
         $warunki = array_map(
-            static fn (string $sku): string => sprintf(
+            static fn ($sku): string => sprintf(
                 '`%s` LIKE "%%%s%%"',
                 self::column($pole),
-                addcslashes(pSQL($sku), '%_')
+                addcslashes(pSQL((string) $sku), '%_')
             ),
             array_keys($numery)
         );
